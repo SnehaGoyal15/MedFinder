@@ -1,67 +1,91 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
-struct CheapMedicine {
-    string name, salt,price, unit_size;
+
+struct CheapMedicine
+{
+    string name, salt, price, unit_size;
 };
-string toLower(const string& str) {
+
+string toLower(const string &str)
+{
     string result = str;
     transform(result.begin(), result.end(), result.begin(), ::tolower);
     return result;
 }
 
-vector<string> split(string& str, char delimiter) {
+vector<string> split(string &str, char delimiter)
+{
     vector<string> tokens;
     stringstream ss(str);
     string item;
-    while (getline(ss, item, delimiter)) {
+    while (getline(ss, item, delimiter))
+    {
         tokens.push_back(item);
     }
     return tokens;
 }
 
-int main() {
-    ifstream file("cleaned_expensive_after_HASHING.csv"); // updated filename
-    if (!file.is_open()) {
+int main()
+{
+    ifstream file("cleaned_expensive_after_HASHING.csv");
+    if (!file.is_open())
+    {
         cerr << "Could not open CSV file.\n";
         return 1;
     }
 
     string line, header;
-    getline(file, header); // Skip header
+    getline(file, header);
     vector<vector<string>> data;
 
-    while (getline(file, line)) {
+    while (getline(file, line))
+    {
         vector<string> row;
         string temp;
 
-        for (char ch : line) {
-           if (ch == ',' ) 
-             {
+        for (char ch : line)
+        {
+            if (ch == ',')
+            {
                 row.push_back(temp);
                 temp = "";
-            } else {
+            }
+            else
+            {
                 temp += ch;
             }
         }
-        row.push_back(temp); // add last field
-        if (row.size()>=11) data.push_back(row);
+        row.push_back(temp);
+        if (row.size() >= 11)
+        {
+            data.push_back(row);
+        }
     }
-    while (true) {
+
+    while (true)
+    {
         cout << "\nEnter medicine name (partial allowed, 'exit' to quit): ";
         string input;
         getline(cin, input);
-        if (toLower(input) == "exit") break;
+
+        if (toLower(input) == "exit")
+        {
+            break;
+        }
 
         string input_lower = toLower(input);
         bool found = false;
 
-        for (auto &row : data) {
+        for (auto &row : data)
+        {
             string med_name_lower = toLower(row[1]);
 
-            if (med_name_lower.find(input_lower) != string::npos) {
+            if (med_name_lower.find(input_lower) != string::npos)
+            {
                 found = true;
 
-                if (toLower(row[6]) == "no match") {
+                if (toLower(row[6]) == "no match")
+                {
                     cout << "\nNo cheaper alternatives for: " << row[1] << endl;
                     continue;
                 }
@@ -72,32 +96,46 @@ int main() {
                 cout << "Price     : " << row[3] << "\n";
                 cout << "Salts     : " << row[5] << "\n";
 
-                vector<string> cheap_names   = split(row[7], '|');
-                vector<string> cheap_salts   = split(row[8], '|');
-                vector<string> cheap_prices  = split(row[9], '|');
-                vector<string> cheap_units   = split(row[10], '|');
+                vector<string> cheap_names = split(row[7], '|');
+                vector<string> cheap_salts = split(row[8], '|');
+                vector<string> cheap_prices = split(row[9], '|');
+                vector<string> cheap_units = split(row[10], '|');
 
                 int count = cheap_names.size();
-                priority_queue<CheapMedicine, vector<CheapMedicine>, greater<CheapMedicine>> pq;
 
-                for (int i = 0; i < count; ++i) {
-                    string name  =  cheap_names[i] ;
-                    string salt  = cheap_salts[i] ;
-                    string price = cheap_prices[i] ;
-                    string unit  = cheap_units[i] ;
-                    try {
-                        stof(price); // validate price
-                        pq.push({toLower(name), toLower(salt),(price),(unit)});
-                    } catch (...) {
+                auto cmp = [](const CheapMedicine &a, const CheapMedicine &b)
+                {
+                    return stof(a.price) > stof(b.price);
+                };
+
+                priority_queue<CheapMedicine, vector<CheapMedicine>, decltype(cmp)> pq(cmp);
+
+                for (int i = 0; i < count; ++i)
+                {
+                    string name = cheap_names[i];
+                    string salt = cheap_salts[i];
+                    string price = cheap_prices[i];
+                    string unit = cheap_units[i];
+                    try
+                    {
+                        stof(price);
+                        pq.push({toLower(name), toLower(salt), price, unit});
+                    }
+                    catch (...)
+                    {
                         continue;
                     }
                 }
 
-                if (pq.empty()) {
+                if (pq.empty())
+                {
                     cout << "\nNo valid cheaper alternatives found.\n";
-                } else {
+                }
+                else
+                {
                     cout << "\n--- Cheaper Alternatives (Sorted by Price) ---\n";
-                    while (!pq.empty()) {
+                    while (!pq.empty())
+                    {
                         CheapMedicine c = pq.top();
                         pq.pop();
                         cout << "Name      : " << c.name << "\n";
@@ -109,9 +147,12 @@ int main() {
                 }
             }
         }
-        if (!found) {
+
+        if (!found)
+        {
             cout << "\nNo matching medicine found for input.\n";
         }
     }
+
     return 0;
 }
