@@ -1,0 +1,21 @@
+PUNS_FRONTEND
+│
+├── static
+│   ├── image
+│   │   ├── bg_signup.jpg
+│   │   ├── bg.jpg
+│   │   └── logo.jpg
+│   ├── js
+│   │   ├── script.js
+│   │   └── allergy.js
+│   ├── app.py
+│   └── style.css
+│
+├── templates
+│   ├── about.html
+│   ├── find.html
+│   ├── index.html
+│   └── login.html
+│
+├── backend-final.py
+└── Datasets
