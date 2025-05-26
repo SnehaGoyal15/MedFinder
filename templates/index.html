@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PUNS - Med Finder</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+    <!-- Header -->
+    <section id="header">
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='image/logo.jpg') }}" class="logo" alt="Logo" />
+        </a>
+        <div>
+            <ul id="navbar">
+                <li><a class="active" href="{{ url_for('index') }}">Home</a></li>
+                {% if session.get('user') %}
+                    <li><a href="{{ url_for('find') }}">Find</a></li>
+                    <li><a href="{{ url_for('about') }}">About</a></li>
+                    <li><a href="{{ url_for('home') }}">Welcome, {{ session['user']['name'] }}</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('find') }}">Find</a></li>
+                    <li><a href="{{ url_for('about') }}">About</a></li>
+                {% endif %}
+                <a href="#" id="close"><i class="far fa-times"></i></a>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <h4>Way to Cheaper Medicine</h4>
+        <h2>PUNS MedFinder</h2>
+        <h3>Your smart guide to safe</h3>
+        <h3>and affordable medicine</h3>
+        <p>Stay healthy, Stay safe</p>
+        {% if not session.get('user') %}
+            <a href="{{ url_for('login') }}" class="btn">Get Started</a>
+        {% else %}
+            <a href="{{ url_for('find') }}" class="btn">Find Medicine</a>
+        {% endif %}
+    </section>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
