@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PUNS - Med Finder</title>
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <!-- Header -->
+  <section id="header">
+    <a href="{{ url_for('index') }}">
+      <img src="{{ url_for('static', filename='image/logo.jpg') }}" class="logo" alt="Logo" />
+    </a>
+    <div>
+      <ul id="navbar">
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a class="active" href="{{ url_for('login') }}">Login</a></li>
+        <li><a href="{{ url_for('find') }}">Find</a></li>
+        <li><a href="{{ url_for('about') }}">About</a></li>
+        <a href="#" id="close"><i class="far fa-times"></i></a>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Login Container -->
+  <div class="login-container">
+    <form class="login-form" method="POST" action="{{ url_for('login') }}">
+      <hr style="margin: 20px 0;" />
+      <h2 style="text-align: center;">LOGIN</h2>
+
+      <!-- Google Sign-In -->
+      <button type="button" id="google-login" class="google-button">
+        <i class="fab fa-google"></i> Google
+      </button>
+
+      <!-- GitHub Sign-In -->
+      <button type="button" id="github-login" class="google-button" style="background-color: #24292e; color: white;">
+        <i class="fab fa-github"></i> GitHub
+      </button>
+
+      <!-- Phone Sign-In -->
+      <div id="phone-container" style="margin-top: 15px;">
+        <input type="text" id="phone-number" placeholder="+91XXXXXXXXXX" />
+        <div id="recaptcha-container"></div>
+        <button type="button" id="send-code">Send OTP</button>
+        <input type="text" id="verification-code" placeholder="Enter OTP" />
+        <button type="button" id="verify-code">Verify OTP</button>
+      </div>
+
+      <!-- Guest Option -->
+      <button type="button" id="guest-login" style="margin-top: 20px; background-color: #aaa; color: white;">
+        Continue as Guest
+      </button>
+    </form>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getAuth,
+      GoogleAuthProvider,
+      GithubAuthProvider,
+      signInWithPopup,
+      RecaptchaVerifier,
+      signInWithPhoneNumber,
+      signInAnonymously
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDdOR0UxAIv3Gtt7pUrCbHXu2Ip61qOSW0",
+      authDomain: "puns--med-finder.firebaseapp.com",
+      projectId: "puns--med-finder",
+      storageBucket: "puns--med-finder.appspot.com",
+      messagingSenderId: "698903478643",
+      appId: "1:698903478643:web:10bd009b3bcf45f5c9c506",
+      measurementId: "G-8V9TEGKN9M"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Google Login
+    document.getElementById("google-login").addEventListener("click", () => {
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          const user = result.user;
+          alert(`Welcome ${user.displayName}`);
+          // sessionStorage mein save karo user info
+          sessionStorage.setItem("userName", user.displayName);
+          window.location.href = '/find';
+        })
+        .catch((error) => {
+          console.error("Google login failed:", error.message);
+          alert("Google login failed: " + error.message);
+        });
+    });
+
+    // GitHub Login
+    document.getElementById("github-login").addEventListener("click", () => {
+      const provider = new GithubAuthProvider();
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          const user = result.user;
+          const name = user.displayName || 'GitHub User';
+          alert(`Welcome ${name}`);
+          sessionStorage.setItem("userName", name);
+          window.location.href = '/find';
+        })
+        .catch((error) => {
+          console.error("GitHub login failed:", error.message);
+          alert("GitHub login failed: " + error.message);
+        });
+    });
+
+    // Phone Auth
+    window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+      'size': 'normal',
+      'callback': () => {
+        console.log("reCAPTCHA solved");
+      }
+    }, auth);
+
+    let confirmationResult;
+
+    document.getElementById("send-code").addEventListener("click", () => {
+      const phoneNumber = document.getElementById("phone-number").value;
+      signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
+        .then((result) => {
+          confirmationResult = result;
+          alert("OTP sent!");
+        })
+        .catch((error) => {
+          console.error("OTP send failed:", error.message);
+          alert("OTP send failed: " + error.message);
+        });
+    });
+
+    document.getElementById("verify-code").addEventListener("click", () => {
+      const code = document.getElementById("verification-code").value;
+      confirmationResult.confirm(code)
+        .then((result) => {
+          const user = result.user;
+          alert("Phone login successful");
+          sessionStorage.setItem("userName", user.phoneNumber);
+          window.location.href = '/find';
+        })
+        .catch((error) => {
+          console.error("OTP verification failed:", error.message);
+          alert("OTP verification failed: " + error.message);
+        });
+    });
+
+    // Guest Login
+    document.getElementById("guest-login").addEventListener("click", () => {
+      signInAnonymously(auth)
+        .then(() => {
+          alert("Continuing as Guest");
+          sessionStorage.setItem("userName", "Guest");
+          window.location.href = '/find';
+        })
+        .catch((error) => {
+          console.error("Guest login failed:", error.message);
+          alert("Guest login failed: " + error.message);
+        });
+    });
+  </script>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

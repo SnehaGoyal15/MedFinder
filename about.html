@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PUNS- Med Finder</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+    <section id="header">
+        <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='image/logo.jpg') }}" class="logo" alt="Logo" /></a>
+        <div>
+            <ul id="navbar">
+                <li><a href="{{ url_for('index') }}" >Home</a></li>
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+                <li><a href="{{ url_for('find') }}">Find</a></li>
+                <li><a class="active" href="{{ url_for('about') }}">About</a></li>
+                <a href="#" id="close"><i class="far fa-times"></i></a>
+            </ul>
+        </div>
+    </section>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --navy: #002147;
+            --darkgreen: #014421;
+            --lightgreen: #e6f2ec;
+            --lightblue: #e6ecf5;
+            --white: #ffffff;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--lightblue);
+            color: var(--navy);
+        }
+        header {
+            background-color: var(--navy);
+            color: var(--white);
+            padding: 20px 40px;
+            text-align: center;
+        }
+        main {
+            padding: 40px;
+            max-width: 1000px;
+            margin: auto;
+            background-color: var(--white);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+    color: var(--darkgreen);
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+h2 {
+    color: var(--darkgreen);
+    font-size: 22px;
+    margin-top: 25px;
+    margin-bottom: 8px;
+}
+
+        .feature-box, .objective-box {
+            background-color: var(--lightgreen);
+            border-left: 6px solid var(--darkgreen);
+            margin: 15px 0;
+            padding: 15px 20px;
+            border-radius: 8px;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--navy);
+            color: var(--white);
+            font-size: 14px;
+        }
+        .credits {
+            margin-top: 40px;
+            background-color: var(--lightblue);
+            padding: 20px;
+            border-left: 6px solid var(--navy);
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>PUNS MedFinder</h1>
+    <p>Your Smart Guide to Safe and Affordable Medicine</p>
+</header>
+
+<main>
+    <h1>About Us</h1>
+    <p><strong>PUNS MedFinder</strong> (Pocket Utility & No-Allergy Substitutes) is a health-tech application created to simplify medicine selection by helping users find affordable and allergy-safe alternatives.</p>
+
+    <h2>Objective</h2>
+    <div class="objective-box">
+        <ul>
+            <li>Provide cost-effective substitutes for branded medicines</li>
+            <li>Help users avoid medications with allergens</li>
+            <li>Enable informed decisions using salt compositions</li>
+            <li>Promote use of generic medicines to cut healthcare costs</li>
+        </ul>
+    </div>
+
+    <h2>Key Features</h2>
+    <div class="feature-box">
+        <ul>
+            <li>Search medicines by name</li>
+            <li>View generic and branded alternatives with price comparisons</li>
+            <li>Filter suggestions based on user allergy profiles</li>
+            <li>Receive safe and effective medicine recommendations</li>
+        </ul>
+    </div>
+
+    <h2>Our Vision</h2>
+    <p>To revolutionize medicine accessibility by providing a trusted platform that prioritizes safety, affordability, and awareness for all users.</p>
+
+    <h2>Who We Are</h2>
+    <p>We are a team of technology enthusiasts and healthcare advocates on a mission to make medicine safe and affordable for everyone, especially in underserved regions.</p>
+
+    <div class="credits">
+        <h2>Made With a Collaborative Approach By:</h2>
+        <p><strong>Priya Kansal</strong>, <strong>Nandini Singhal</strong>, <strong>Sneha Goyal</strong>, and <strong>Urvee Pundir</strong></p>
+    </div>
+</main>
+
+<footer>
+    &copy; 2025 PUNS MedFinder. All rights reserved.
+</footer>
+
+</body>
+</html>

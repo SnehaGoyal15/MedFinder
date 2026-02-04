@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PUNS- Med Finder</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+    <section id="header">
+        <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='image/logo.jpg') }}" class="logo" alt="Logo" /></a>
+        <div>
+            <ul id="navbar">
+                <li><a href="{{ url_for('index') }}" >Home</a></li>
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+                <li><a class="active" href="{{ url_for('find') }}">Find</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <a href="#" id="close"><i class="far fa-times"></i></a>
+            </ul>
+        </div>
+    </section>
+
+    <div class="find-container">
+        <form id="findform" class="find-form" method="POST" action="{{ url_for('find') }}">
+            <h2>FIND</h2>
+            <div class="form-grid">
+                <div class="box-allergy-box">
+                    <h4>Select Allergy Types</h4><br>
+                    {% for allergy in [
+                        "Allergic rash risk",
+                        "Allergic reaction risk",
+                        "Allergy risk(injection site)",
+                        "Cephalosphorin allergy",
+                        "Liver toxicity and allergy risk",
+                        "NSAID allergy",
+                        "Penicillin allergy",
+                        "Stevens johnson syndrome",
+                        "Sulfa allergy",
+                        "Sulpha allergy with combination",
+                        "Tetracycline allergy",
+                        "Topical allergy risk"
+                    ] %}
+                    <label onclick="showInfo('{{ allergy }}', event)">
+                        <input type="checkbox" name="allergies" value="{{ allergy }}"> {{ allergy }}
+                    </label><br>
+                    {% endfor %}
+                    <label>
+                        <input type="checkbox" name="allergies" value="none"> None
+                    </label><br><br>
+                </div>
+
+                <div class="box-medicine-box">
+                    <input type="text" name="medicine" placeholder="Enter Medicine Name" required />
+                    <button type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Allergy warnings -->
+    {% if warnings %}
+        {% for warning in warnings %}
+            <div class="warning">{{ warning }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Search Results -->
+    {% if results %}
+        <div class="results-section">
+            {% for res in results %}
+                <div class="result-box">
+                    <h3>{{ res.name }}</h3>
+                    <p><strong>Unit Size:</strong> {{ res.unit }}</p>
+                    <p><strong>Price:</strong> ₹{{ res.price }}</p>
+                    <p><strong>Salts:</strong> {{ res.salts }}</p>
+                    <p><strong>Side Effects:</strong> {{ res.effects }}</p>
+
+                    {% if res.alternatives %}
+                        <p><strong>Cheaper Alternatives:</strong></p>
+                        {% for alt in res.alternatives %}
+                            <div class="alt-box">
+                                <p><strong>Name:</strong> {{ alt.name }}</p>
+                                <p><strong>Price:</strong> ₹{{ alt.price }}</p>
+                                <p><strong>Salts:</strong> {{ alt.salts }}</p>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <script src="{{ url_for('static', filename='js/allergy.js') }}"></script>
+</body>
+</html>

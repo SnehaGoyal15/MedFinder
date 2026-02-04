@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PUNS- Med Finder</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+    <section id="header">
+        <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='image/logo.jpg') }}" class="logo" alt="Logo" /></a>
+        <div>
+            <ul id="navbar">
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+                <li><a href="{{ url_for('find') }}">Find</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <a href="#" id="close"><i class="far fa-times"></i></a>
+            </ul>
+        </div>
+    </section>
+    <div class="signup-container">
+        <center>
+            <form class="signup-form" method="POST" action="{{ url_for('signup') }}">
+                <h2>Create Account</h2>
+                <input type="text" name="fullname" placeholder="Full Name" required />
+                <input type="email" name="email" placeholder="Email Address" required />
+                <input type="password" name="password" placeholder="Password" required />
+                <input type="password" name="confirm_password" placeholder="Confirm Password" required />
+                <button type="submit">Sign Up</button>
+                <p class="login-text">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+            </form>
+        </center>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
